@@ -33,11 +33,6 @@ class MunicipesController < ApplicationController
     end
   end
 
-  # DELETE /municipes/1
-  def destroy
-    @municipe.destroy
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_municipe
