@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_124423) do
+ActiveRecord::Schema.define(version: 2021_05_04_142014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "cep", limit: 11
+    t.string "logradouro"
+    t.string "complemento"
+    t.string "bairro"
+    t.string "cidade"
+    t.string "uf", limit: 2
+    t.integer "ibge"
+    t.bigint "municipe_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["municipe_id"], name: "index_addresses_on_municipe_id"
+  end
 
   create_table "municipes", force: :cascade do |t|
     t.string "full_name"
@@ -26,4 +40,5 @@ ActiveRecord::Schema.define(version: 2021_05_04_124423) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "addresses", "municipes"
 end
