@@ -5,3 +5,19 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Municipe.create({
+    "full_name": "Naldoo",
+    "cpf": 14411111123,
+    "phone": "+5527999088877",
+    "photo": "blob",
+    "status": true,
+    "mail": "e-mail@teste.com.br",
+    "dta_nasc": "01/08/1994",
+    "address_attributes":{
+        "cep": 290160790,
+        "logradouro": "rua teste",
+        "bairro": "de Fátima",
+        "cidade": "Serra",
+        "uf": "ES"
+    }
+});
