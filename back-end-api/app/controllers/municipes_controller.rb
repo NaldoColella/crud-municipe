@@ -3,7 +3,7 @@ class MunicipesController < ApplicationController
 
   # GET /municipes
   def index
-    @municipes = Municipe.all
+    @municipes = Municipe.all.map{ |item| MunicipeSerializer.new(item) }
     @totalMunicipes = Municipe.count;
 
     render json: { items: @municipes, totalCount: @totalMunicipes }
