@@ -1,12 +1,12 @@
 class MunicipesController < ApplicationController
-  before_action :set_municipe, only: [:show, :update, :destroy]
+  before_action :set_municipe, only: [:show, :update]
 
   # GET /municipes
   def index
-    @municipes = Municipe.all.map{ |item| MunicipeSerializer.new(item) }
+    @municipes = checkPaginateParams(params) ? getPaginatedResults(params) : getAllResults()
     @totalMunicipes = Municipe.count;
 
-    render json: { items: @municipes, totalCount: @totalMunicipes }
+    render json: { items: serializeMunicipes(@municipes), totalCount: @totalMunicipes }
   end
 
   # GET /municipes/1
@@ -43,6 +43,22 @@ class MunicipesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def municipe_params
       params.require(:municipe).permit(:full_name, :cpf, :mail, :phone, :photo, :status, :dta_nasc, :address, address_attributes: [:cep,:logradouro,:complemento,:bairro,:cidade,:uf,:ibge])
+    end
+    
+    def checkPaginateParams(params)
+      params[:page].present? && params[:per_page].present?
+    end
+  
+    def getPaginatedResults(params)
+      Municipe.page(params[:page]).per(params[:per_page])
+    end
+  
+    def getAllResults
+      Municipe.all
+    end
+  
+    def serializeMunicipes(items) 
+      items.map{ |item| MunicipeSerializer.new(item) }
     end
 end
 
