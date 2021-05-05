@@ -48,5 +48,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  eslint: {
+    emitError: false,
+    failOnError: false
   }
 }
