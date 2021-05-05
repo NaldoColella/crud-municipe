@@ -4,8 +4,9 @@ class MunicipesController < ApplicationController
   # GET /municipes
   def index
     @municipes = Municipe.all
+    @totalMunicipes = Municipe.count;
 
-    render json: @municipes
+    render json: { items: @municipes, totalCount: @totalMunicipes }
   end
 
   # GET /municipes/1
