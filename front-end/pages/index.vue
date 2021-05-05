@@ -1,27 +1,84 @@
 <template>
-  <div>
-    <Search @search="getMunicipes" />
-    <MunicipeList
-      :municipes="municipes"
-      :pageCount="pageCount"
-      :searchText="searchText"
-      @pageChange="getMunicipes"
-    />
-  </div>
+  <b-container fluid>
+    <b-table
+      :items="municipes"
+      :busy.sync="isBusy"
+      :per-page="perPage"
+      :current-page="currentPage"
+      :fields="fields"
+    >
+      <template #cell(actions)="row">
+        <b-button
+          size="sm"
+          @click="info(row.item, row.index, $event.target)"
+          class="mr-1"
+        >
+          Modal
+        </b-button>
+      </template>
+    </b-table>
+    <b-row>
+      <b-col>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalCount"
+          :per-page="perPage"
+          aria-controls="my-table"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+    <b-modal
+      :id="infoModal.id"
+      :title="infoModal.title"
+      ok-only
+      @hide="resetInfoModal"
+    >
+    <p>{{infoModal.content}}</p>
+    </b-modal>
+  </b-container>
 </template>
 
 <script>
 export default {
   data: () => ({
     municipes: [],
+    totalCount: 0,
     pageCount: 1,
     searchText: "",
+    isBusy: false,
+    currentPage: 1,
+    perPage: 5,
+    infoModal: {
+      id: "info-modal",
+      title: "",
+      content: {},
+    },
+    fields: [{ key: "full_name", label: "Nome Completo" }, "cpf", { key: 'actions', label: 'Actions' }],
   }),
+  mounted: function () {
+    this.getTable();
+  },
   methods: {
-    async getMunicipes(name, page = 1) {
-      const res = await this.$axios.$get('http://127.0.0.1:3000/municipes/')
-      this.municipes = res
-    }
+    async getTable(ctx) {
+      this.isBusy = true;
+      try {
+        const res = await this.$axios.$get("http://127.0.0.1:3000/municipes/");
+        this.isBusy = false;
+        this.municipes = res.items;
+        this.totalCount = res.totalCount;
+      } catch (error) {
+        this.isBusy = false;
+      }
+    },
+    info(item, index, button) {
+      this.infoModal.title = "";
+      this.infoModal.content = item;
+      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
+    },
+    resetInfoModal() {
+      this.infoModal.title = "";
+      this.infoModal.content = "";
+    },
   },
 };
 </script>
