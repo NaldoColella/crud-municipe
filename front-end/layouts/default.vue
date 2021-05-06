@@ -1,10 +1,19 @@
 <template>
   <div>
+    <header id="topo">
+
+    </header>
     <Nuxt />
   </div>
 </template>
 
 <style>
+header#topo{
+  background: #007bff;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 50px;
+}
 html {
   font-family:
     'Source Sans Pro',
@@ -31,32 +40,12 @@ html {
   margin: 0;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+.table .thead-light th {
+    color: #fff;
+    background-color: #2c88ea;
+    border-color: #dee2e6;
 }
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+table.b-table .b-table-busy-slot td{
+  padding: 60px 0px;
 }
 </style>
