@@ -55,5 +55,9 @@ export default {
   eslint: {
     emitError: false,
     failOnError: false
-  }
+  },
+
+  bootstrapVue: {
+    icons: true
+   }
 }
