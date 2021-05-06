@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-table
-      :items="municipes"
+      :items="getTable"
       :busy.sync="isBusy"
       :per-page="perPage"
       :current-page="currentPage"
@@ -43,7 +43,6 @@ export default {
   data: () => ({
     municipes: [],
     totalCount: 0,
-    pageCount: 1,
     searchText: "",
     isBusy: false,
     currentPage: 1,
@@ -55,17 +54,19 @@ export default {
     },
     fields: [{ key: "full_name", label: "Nome Completo" }, "cpf", { key: 'actions', label: 'Actions' }],
   }),
-  mounted: function () {
-    this.getTable();
-  },
   methods: {
     async getTable(ctx) {
       this.isBusy = true;
       try {
-        const res = await this.$axios.$get("http://127.0.0.1:3000/municipes/");
+        const params = {
+          per_page: ctx.perPage,
+          page: ctx.currentPage
+        };
+
+        const { items, totalCount } = await this.$axios.$get('/municipes', { params });
         this.isBusy = false;
-        this.municipes = res.items;
-        this.totalCount = res.totalCount;
+        this.totalCount = totalCount;
+        return items;
       } catch (error) {
         this.isBusy = false;
       }

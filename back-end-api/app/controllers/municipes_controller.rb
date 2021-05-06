@@ -1,12 +1,12 @@
 class MunicipesController < ApplicationController
-  before_action :set_municipe, only: [:show, :update, :destroy]
+  before_action :set_municipe, only: [:show, :update]
 
   # GET /municipes
   def index
-    @municipes = Municipe.all.map{ |item| MunicipeSerializer.new(item) }
-    @totalMunicipes = Municipe.count;
+    @municipes = Municipe.page(params[:page] || 1).per(params[:per_page] || 100)
+    @totalMunicipes = Municipe.count
 
-    render json: { items: @municipes, totalCount: @totalMunicipes }
+    render json: { items: ActiveModelSerializers::SerializableResource.new(@municipes, each_serializer: MunicipeSerializer), totalCount: @totalMunicipes }
   end
 
   # GET /municipes/1
