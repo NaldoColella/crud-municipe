@@ -1,24 +1,45 @@
 <template>
-  <b-container fluid>
-    <b-table
-      :items="getTable"
-      :busy.sync="isBusy"
-      :per-page="perPage"
-      :current-page="currentPage"
-      :fields="fields"
-    >
-      <template #cell(actions)="row">
-        <b-button
-          size="sm"
-          @click="info(row.item, row.index, $event.target)"
-          class="mr-1"
-        >
-          Modal
-        </b-button>
-      </template>
-    </b-table>
+  <b-container>
     <b-row>
-      <b-col>
+      <b-col cols="12">
+        <b-table
+          :items="getTable"
+          :busy.sync="isBusy"
+          :per-page="perPage"
+          :current-page="currentPage"
+          :fields="fields"
+          :outlined="true"
+          :fixed="true"
+          :head-variant="'light'"
+          :bordered="true"
+          :hover="true"
+          @row-dblclicked="rowDblClicked"
+        >
+          <template #cell(actions)="row">
+            <b-button
+              size="sm"
+              @click="info(row.item, row.index, $event.target)"
+              class="mr-1"
+            >
+              Modal
+            </b-button>
+          </template>
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Carregando...</strong>
+            </div>
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
+    <b-row align-h="between">
+      <b-col cols="2">
+        <b-button variant="outline-primary" to="/cadastro">
+          <b-icon icon="plus" style="margin-right: 5px"></b-icon><span>Novo Cadastro</span>
+        </b-button>
+      </b-col>
+      <b-col cols="10" md="auto">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalCount"
@@ -33,7 +54,7 @@
       ok-only
       @hide="resetInfoModal"
     >
-    <p>{{infoModal.content}}</p>
+      <p>{{ infoModal.content }}</p>
     </b-modal>
   </b-container>
 </template>
@@ -52,18 +73,27 @@ export default {
       title: "",
       content: {},
     },
-    fields: [{ key: "full_name", label: "Nome Completo" }, "cpf", { key: 'actions', label: 'Actions' }],
+    fields: [
+      { key: "full_name", label: "Nome Completo" },
+      "cpf",
+      { key: "actions", label: "Actions" },
+    ],
   }),
   methods: {
+    rowDblClicked(item, index, event) {
+      console.log(item);
+    },
     async getTable(ctx) {
       this.isBusy = true;
       try {
         const params = {
           per_page: ctx.perPage,
-          page: ctx.currentPage
+          page: ctx.currentPage,
         };
 
-        const { items, totalCount } = await this.$axios.$get('/municipes', { params });
+        const { items, totalCount } = await this.$axios.$get("/municipes", {
+          params,
+        });
         this.isBusy = false;
         this.totalCount = totalCount;
         return items;
@@ -85,34 +115,4 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>
