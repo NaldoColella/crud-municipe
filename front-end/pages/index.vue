@@ -36,9 +36,7 @@
     <b-row align-h="between">
       <b-col cols="2">
         <b-button variant="outline-primary" to="/cadastro">
-          <b-icon icon="plus" style="margin-right: 5px" />
-
-          <span>Novo Cadastro</span>
+          <b-icon icon="plus" style="margin-right: 5px" />Novo Cadastro
         </b-button>
       </b-col>
       <b-col cols="10" md="auto">

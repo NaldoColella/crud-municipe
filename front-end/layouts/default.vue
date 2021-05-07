@@ -54,4 +54,7 @@ html {
 table.b-table .b-table-busy-slot td {
   padding: 60px 0px;
 }
+hr{
+  border-color: #69b1ff;
+}
 </style>

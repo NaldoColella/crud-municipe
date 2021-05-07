@@ -265,15 +265,13 @@
         </b-form-group>
       </b-form-row>
     </b-form>
-
+    <hr />
     <b-button variant="primary" @click="save">
-      <b-icon icon="file-earmark" style="margin-right: 5px"></b-icon
-      ><span>Salvar</span>
+      <b-icon icon="file-earmark" style="margin-right: 5px" />Salvar
     </b-button>
 
     <b-button variant="outline-primary" to="/">
-      <b-icon icon="arrow-left" style="margin-right: 5px"></b-icon
-      ><span>Listagem</span>
+      <b-icon icon="arrow-left" style="margin-right: 5px" />Listagem
     </b-button>
   </b-container>
 </template>
@@ -304,16 +302,16 @@ export default {
       imgUrlPreview: ''
     }
   },
+  computed: {
+    formImg () {
+      return this.form.img
+    }
+  },
   watch: {
     formImg () {
       this.imgUrlPreview = this.form.img
         ? URL.createObjectURL(this.form.img)
         : ''
-    }
-  },
-  computed: {
-    formImg () {
-      return this.form.img
     }
   },
   methods: {
