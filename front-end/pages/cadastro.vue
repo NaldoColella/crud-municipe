@@ -13,7 +13,7 @@
             <div id="preview">
               <img v-if="imgUrlPreview" :src="imgUrlPreview" />
               <div v-if="!imgUrlPreview" class="placeholder">
-                <b-icon icon="image"></b-icon>
+                <b-icon icon="image" />
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text>
-                          <b-icon icon="person"></b-icon>
+                          <b-icon icon="person" />
                         </b-input-group-text>
                       </b-input-group-prepend>
 
@@ -280,48 +280,48 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       form: {
-        full_name: "",
-        cpf: "",
-        phone: "",
+        full_name: '',
+        cpf: '',
+        phone: '',
         img: null,
         status: true,
-        dta_nasc: "",
+        dta_nasc: '',
         address_attributes: {
-          cep: "",
-          logradouro: "",
-          bairro: "",
-          cidade: "",
-          uf: "",
-        },
+          cep: '',
+          logradouro: '',
+          bairro: '',
+          cidade: '',
+          uf: ''
+        }
       },
       optionsStatus: [
-        { value: true, text: "Ativo" },
-        { value: false, text: "Inativo" },
+        { value: true, text: 'Ativo' },
+        { value: false, text: 'Inativo' }
       ],
-      imgUrlPreview: "",
-    };
+      imgUrlPreview: ''
+    }
   },
   watch: {
-    formImg() {
+    formImg () {
       this.imgUrlPreview = this.form.img
         ? URL.createObjectURL(this.form.img)
-        : "";
-    },
+        : ''
+    }
   },
   computed: {
-    formImg() {
-      return this.form.img;
-    },
+    formImg () {
+      return this.form.img
+    }
   },
   methods: {
-    save() {
-      console.log(this.form);
-    },
-  },
-};
+    save () {
+      console.log(this.form)
+    }
+  }
+}
 </script>
 <style>
 #preview {

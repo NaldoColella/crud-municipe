@@ -17,16 +17,16 @@
         >
           <template #cell(actions)="row">
             <b-button
+              class="mr-1"
               size="sm"
               @click="info(row.item, row.index, $event.target)"
-              class="mr-1"
             >
               Modal
             </b-button>
           </template>
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle"></b-spinner>
+              <b-spinner class="align-middle" />
               <strong>Carregando...</strong>
             </div>
           </template>
@@ -36,7 +36,9 @@
     <b-row align-h="between">
       <b-col cols="2">
         <b-button variant="outline-primary" to="/cadastro">
-          <b-icon icon="plus" style="margin-right: 5px"></b-icon><span>Novo Cadastro</span>
+          <b-icon icon="plus" style="margin-right: 5px" />
+
+          <span>Novo Cadastro</span>
         </b-button>
       </b-col>
       <b-col cols="10" md="auto">
@@ -45,7 +47,7 @@
           :total-rows="totalCount"
           :per-page="perPage"
           aria-controls="my-table"
-        ></b-pagination>
+        />
       </b-col>
     </b-row>
     <b-modal
@@ -64,54 +66,53 @@ export default {
   data: () => ({
     municipes: [],
     totalCount: 0,
-    searchText: "",
+    searchText: '',
     isBusy: false,
     currentPage: 1,
     perPage: 5,
     infoModal: {
-      id: "info-modal",
-      title: "",
-      content: {},
+      id: 'info-modal',
+      title: '',
+      content: {}
     },
     fields: [
-      { key: "full_name", label: "Nome Completo" },
-      "cpf",
-      { key: "actions", label: "Ações" },
-    ],
+      { key: 'full_name', label: 'Nome Completo' },
+      'cpf',
+      { key: 'actions', label: 'Ações' }
+    ]
   }),
   methods: {
-    rowDblClicked(item, index, event) {
-      console.log(item);
+    rowDblClicked (item, index, event) {
     },
-    async getTable(ctx) {
-      this.isBusy = true;
+    async getTable (ctx) {
+      this.isBusy = true
       try {
         const params = {
           per_page: ctx.perPage,
-          page: ctx.currentPage,
-        };
+          page: ctx.currentPage
+        }
 
-        const { items, totalCount } = await this.$axios.$get("/municipes", {
-          params,
-        });
-        this.isBusy = false;
-        this.totalCount = totalCount;
-        return items;
+        const { items, totalCount } = await this.$axios.$get('/municipes', {
+          params
+        })
+        this.isBusy = false
+        this.totalCount = totalCount
+        return items
       } catch (error) {
-        this.isBusy = false;
+        this.isBusy = false
       }
     },
-    info(item, index, button) {
-      this.infoModal.title = "";
-      this.infoModal.content = item;
-      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
+    info (item, index, button) {
+      this.infoModal.title = ''
+      this.infoModal.content = item
+      this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
-    resetInfoModal() {
-      this.infoModal.title = "";
-      this.infoModal.content = "";
-    },
-  },
-};
+    resetInfoModal () {
+      this.infoModal.title = ''
+      this.infoModal.content = ''
+    }
+  }
+}
 </script>
 
 <style>

@@ -53,7 +53,7 @@ export default {
   },
 
   eslint: {
-    emitError: false,
+    emitError: true,
     failOnError: false
   },
 
