@@ -76,7 +76,7 @@ export default {
     fields: [
       { key: "full_name", label: "Nome Completo" },
       "cpf",
-      { key: "actions", label: "Actions" },
+      { key: "actions", label: "Ações" },
     ],
   }),
   methods: {
