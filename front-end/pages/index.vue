@@ -74,7 +74,7 @@ export default {
       content: {}
     },
     fields: [
-      { key: 'full_name', label: 'Nome Completo' },
+      { key: 'nome_completo', label: 'Nome Completo' },
       'cpf',
       { key: 'actions', label: 'Ações' }
     ]
