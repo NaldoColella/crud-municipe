@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_192432) do
+ActiveRecord::Schema.define(version: 2021_05_10_112055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,15 +30,15 @@ ActiveRecord::Schema.define(version: 2021_05_04_192432) do
   end
 
   create_table "municipes", force: :cascade do |t|
-    t.string "full_name"
+    t.string "nome_completo"
     t.string "cpf", limit: 11
-    t.string "mail"
-    t.string "phone"
-    t.binary "photo"
+    t.string "email"
+    t.string "telefone"
+    t.binary "foto"
     t.boolean "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.date "dta_nasc"
+    t.date "data_nascimento"
   end
 
   add_foreign_key "addresses", "municipes"

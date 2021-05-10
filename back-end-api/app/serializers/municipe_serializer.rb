@@ -1,5 +1,5 @@
 class MunicipeSerializer < ActiveModel::Serializer
-  attributes :id, :full_name, :cpf, :mail, :phone, :photo, :status, :dta_nasc, :address
+  attributes :id, :nome_completo, :cpf, :email, :telefone, :foto, :status, :data_nascimento, :address
 
   has_one :address
 
