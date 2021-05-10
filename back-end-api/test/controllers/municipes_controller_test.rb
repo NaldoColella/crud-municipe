@@ -12,7 +12,7 @@ class MunicipesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create municipe" do
     assert_difference('Municipe.count') do
-      post municipes_url, params: { municipe: { cpf: @municipe.cpf, full_name: @municipe.full_name, mail: @municipe.mail, phone: @municipe.phone, photo: @municipe.photo, status: @municipe.status } }, as: :json
+      post municipes_url, params: { municipe: { cpf: @municipe.cpf, nome_completo: @municipe.nome_completo, email: @municipe.email, telefone: @municipe.telefone, foto: @municipe.foto, status: @municipe.status } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class MunicipesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update municipe" do
-    patch municipe_url(@municipe), params: { municipe: { cpf: @municipe.cpf, full_name: @municipe.full_name, mail: @municipe.mail, phone: @municipe.phone, photo: @municipe.photo, status: @municipe.status } }, as: :json
+    patch municipe_url(@municipe), params: { municipe: { cpf: @municipe.cpf, nome_completo: @municipe.nome_completo, email: @municipe.email, telefone: @municipe.telefone, foto: @municipe.foto, status: @municipe.status } }, as: :json
     assert_response 200
   end
 

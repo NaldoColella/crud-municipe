@@ -42,7 +42,7 @@ class MunicipesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def municipe_params
-      params.require(:municipe).permit(:full_name, :cpf, :mail, :phone, :photo, :status, :dta_nasc, :address, address_attributes: [:cep,:logradouro,:complemento,:bairro,:cidade,:uf,:ibge])
+      params.require(:municipe).permit(:nome_completo, :cpf, :email, :telefone, :foto, :status, :data_nascimento, :address, address_attributes: [:cep,:logradouro,:complemento,:bairro,:cidade,:uf,:ibge])
     end
 end
 

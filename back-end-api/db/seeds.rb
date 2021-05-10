@@ -6,13 +6,13 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 Municipe.create({
-    "full_name": "Naldo Colella De Nardi",
+    "nome_completo": "Naldo Colella De Nardi",
     "cpf": 14411111123,
-    "phone": "+5527999088877",
-    "photo": "blob",
+    "telefone": "+5527999088877",
+    "foto": "blob",
     "status": true,
-    "mail": "e-mail@teste.com.br",
-    "dta_nasc": "01/08/1994",
+    "email": "e-mail@teste.com.br",
+    "data_nascimento": "01/08/1994",
     "address_attributes":{
         "cep": 290160790,
         "logradouro": "rua teste",
@@ -22,13 +22,13 @@ Municipe.create({
     }
 })
 Municipe.create({
-    "full_name": "John Doe",
+    "nome_completo": "John Doe",
     "cpf": 14411111123,
-    "phone": "+5527999088877",
-    "photo": "blob",
+    "telefone": "+5527999088877",
+    "foto": "blob",
     "status": true,
-    "mail": "e-mail@teste.com.br",
-    "dta_nasc": "01/08/1994",
+    "email": "e-mail@teste.com.br",
+    "data_nascimento": "01/08/1994",
     "address_attributes":{
         "cep": 290160790,
         "logradouro": "rua teste",
@@ -38,13 +38,13 @@ Municipe.create({
     }
 })
 Municipe.create({
-    "full_name": "Jane Austin",
+    "nome_completo": "Jane Austin",
     "cpf": 14411111123,
-    "phone": "+5527999088877",
-    "photo": "blob",
+    "telefone": "+5527999088877",
+    "foto": "blob",
     "status": true,
-    "mail": "e-mail@teste.com.br",
-    "dta_nasc": "01/08/1994",
+    "email": "e-mail@teste.com.br",
+    "data_nascimento": "01/08/1994",
     "address_attributes":{
         "cep": 290160790,
         "logradouro": "rua teste",
@@ -54,13 +54,13 @@ Municipe.create({
     }
 })
 Municipe.create({
-    "full_name": "Austin Powers",
+    "nome_completo": "Austin Powers",
     "cpf": 14411111123,
-    "phone": "+5527999088877",
-    "photo": "blob",
+    "telefone": "+5527999088877",
+    "foto": "blob",
     "status": true,
-    "mail": "e-mail@teste.com.br",
-    "dta_nasc": "01/08/1994",
+    "email": "e-mail@teste.com.br",
+    "data_nascimento": "01/08/1994",
     "address_attributes":{
         "cep": 290160790,
         "logradouro": "rua teste",
@@ -70,13 +70,13 @@ Municipe.create({
     }
 })
 Municipe.create({
-    "full_name": "Robert Robinson",
+    "nome_completo": "Robert Robinson",
     "cpf": 14411111123,
-    "phone": "+5527999088877",
-    "photo": "blob",
+    "telefone": "+5527999088877",
+    "foto": "blob",
     "status": true,
-    "mail": "e-mail@teste.com.br",
-    "dta_nasc": "01/08/1994",
+    "email": "e-mail@teste.com.br",
+    "data_nascimento": "01/08/1994",
     "address_attributes":{
         "cep": 290160790,
         "logradouro": "rua teste",
