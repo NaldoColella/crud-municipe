@@ -5,7 +5,7 @@ import CpfValidator from '~/validators/cpfValidator'
 
 export default ({ app }) => {
   Vue.use(VeeValidate, {
-    inject: true,
+    inject: false,
     fieldsBagName: 'veeFields',
     errorBagName: 'veeErrors'
   })
