@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-form>
+    <b-form @submit="save">
       <b-form-row>
         <b-col lg="12">
           <h2 class="title-custom-blue">Cadastro de Munícipe</h2>
@@ -22,9 +22,9 @@
               <b-col lg="12">
                 <b-form-row>
                   <b-form-group
-                    id="input-group-1"
+                    id="input-group-nome-completo"
                     label="Nome Completo:"
-                    label-for="input-1"
+                    label-for="input-nome-completo"
                     class="col-4"
                   >
                     <b-input-group>
@@ -35,28 +35,50 @@
                       </b-input-group-prepend>
 
                       <b-form-input
-                        id="input-1"
-                        v-model="form.full_name"
+                        id="input-nome-completo"
+                        name="input-nome-completo"
+                        v-model="form.nome_completo"
                         type="text"
                         placeholder="Nome Completo"
-                        required
+                        v-validate="{ required: true, min: 3 }"
+                        :state="validateState('input-nome-completo')"
+                        aria-describedby="input-nome-completo-feedback"
+                        data-vv-as="Nome Completo"
                       ></b-form-input>
+
+                      <b-form-invalid-feedback
+                        id="input-nome-completo-feedback"
+                        >{{
+                          veeErrors.first("input-nome-completo")
+                        }}</b-form-invalid-feedback
+                      >
                     </b-input-group>
                   </b-form-group>
 
                   <b-form-group
-                    id="input-group-2"
+                    id="input-group-cpf"
                     label="CPF:"
-                    label-for="input-2"
+                    label-for="input-cpf"
                     class="col-3"
                   >
                     <b-form-input
-                      id="input-2"
+                      id="input-cpf"
+                      name="input-cpf"
                       v-model="form.cpf"
                       type="text"
                       placeholder="CPF"
-                      required
+                      v-mask="masks.cpf"
+                      v-validate="{required: true, max: 14, cpf: true}"
+                      :state="validateState('input-cpf')"
+                      aria-describedby="input-cpf-feedback"
+                      data-vv-as="CPF"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                        id="input-cpf-feedback"
+                        >{{
+                          veeErrors.first("input-cpf")
+                        }}</b-form-invalid-feedback
+                      >
                   </b-form-group>
 
                   <b-form-group
@@ -67,10 +89,11 @@
                   >
                     <b-form-input
                       id="input-3"
-                      v-model="form.phone"
+                      v-model="form.telefone"
                       type="text"
                       placeholder="Telefone"
-                      required
+                      v-mask="masks.telefone"
+                      @input="_updateMask"
                     ></b-form-input>
                   </b-form-group>
 
@@ -97,10 +120,9 @@
                   >
                     <b-form-input
                       id="input-5"
-                      v-model="form.mail"
+                      v-model="form.email"
                       type="email"
                       placeholder="E-mail"
-                      required
                     ></b-form-input>
                   </b-form-group>
 
@@ -112,7 +134,9 @@
                   >
                     <b-form-datepicker
                       id="input-6"
-                      v-model="form.dta_nasc"
+                      v-model="form.data_nascimento"
+                      v-bind="labels['pt-BR']"
+                      :locale="'pt-BR'"
                     ></b-form-datepicker>
                   </b-form-group>
                   <b-form-group
@@ -123,23 +147,22 @@
                   >
                     <b-input-group>
                       <b-form-file
-                        v-model="form.img"
-                        :state="Boolean(form.img)"
+                        v-model="form.foto"
+                        :state="Boolean(form.foto)"
                         placeholder="Escolha uma foto"
                         drop-placeholder="Arraste a foto aqui..."
                         accept="image/*"
                         browse-text="Pesquisar"
-                        required
                       ></b-form-file>
                       <b-input-group-apend
-                        v-if="form.img"
+                        v-if="form.foto"
                         style="margin-left: 10px"
                       >
                         <b-button
                           block
-                          v-if="form.img"
+                          v-if="form.foto"
                           variant="outline-primary"
-                          @click="form.img = null"
+                          @click="form.foto = null"
                         >
                           <span>Remover</span>
                         </b-button>
@@ -171,7 +194,8 @@
             v-model="form.address_attributes.cep"
             type="text"
             placeholder="Cep"
-            required
+            @blur="getAddresViaCEP"
+            v-mask="masks.cep"
           ></b-form-input>
         </b-form-group>
 
@@ -186,7 +210,6 @@
             v-model="form.address_attributes.logradouro"
             type="text"
             placeholder="Logradouro"
-            required
           ></b-form-input>
         </b-form-group>
 
@@ -201,7 +224,6 @@
             v-model="form.address_attributes.complemento"
             type="text"
             placeholder="Complemento"
-            required
           ></b-form-input>
         </b-form-group>
 
@@ -216,7 +238,6 @@
             v-model="form.address_attributes.bairro"
             type="text"
             placeholder="Bairro"
-            required
           ></b-form-input>
         </b-form-group>
 
@@ -231,7 +252,6 @@
             v-model="form.address_attributes.cidade"
             type="text"
             placeholder="Cidade"
-            required
           ></b-form-input>
         </b-form-group>
 
@@ -246,7 +266,6 @@
             v-model="form.address_attributes.uf"
             type="text"
             placeholder="UF"
-            required
           ></b-form-input>
         </b-form-group>
 
@@ -264,15 +283,15 @@
           ></b-form-input>
         </b-form-group>
       </b-form-row>
-    </b-form>
-    <hr />
-    <b-button variant="primary" @click="save">
-      <b-icon icon="file-earmark" style="margin-right: 5px" />Salvar
-    </b-button>
+      <hr />
+      <b-button variant="primary" type="submit">
+        <b-icon icon="file-earmark" style="margin-right: 5px" />Salvar
+      </b-button>
 
-    <b-button variant="outline-primary" to="/">
-      <b-icon icon="arrow-left" style="margin-right: 5px" />Listagem
-    </b-button>
+      <b-button variant="outline-primary" to="/">
+        <b-icon icon="arrow-left" style="margin-right: 5px" />Listagem
+      </b-button>
+    </b-form>
   </b-container>
 </template>
 
@@ -281,42 +300,140 @@ export default {
   data () {
     return {
       form: {
-        full_name: '',
+        nome_completo: '',
         cpf: '',
-        phone: '',
-        img: null,
-        status: true,
-        dta_nasc: '',
+        telefone: '',
+        foto: null,
+        status: 'true',
+        data_nascimento: '',
         address_attributes: {
           cep: '',
           logradouro: '',
           bairro: '',
           cidade: '',
-          uf: ''
+          uf: '',
+          ibge: '',
+          complemento: ''
         }
       },
       optionsStatus: [
-        { value: true, text: 'Ativo' },
-        { value: false, text: 'Inativo' }
+        { value: 'true', text: 'Ativo' },
+        { value: 'false', text: 'Inativo' }
       ],
+      labels: {
+        'pt-BR': {
+          labelPrevYear: 'Ano anterior',
+          labelPrevMonth: 'Mês anterior',
+          labelCurrentMonth: 'Mês Atual',
+          labelNextMonth: 'Próximo Mês',
+          labelNextYear: 'Próximo Ano',
+          labelToday: 'Hoje',
+          labelSelected: 'Data Selecionada',
+          labelNoDateSelected: 'Sem Data Selecionada',
+          labelCalendar: 'Calendário',
+          labelNav: 'Navegação do Calendário',
+          labelHelp: 'Use as setas do teclado para navegar'
+        }
+      },
+      masks: {
+        cpf: '999.999.999-99',
+        telefone: '(99) 9999-9999',
+        cep: '99.999.999'
+      },
       imgUrlPreview: ''
     }
   },
   computed: {
     formImg () {
-      return this.form.img
+      return this.form.foto
     }
+  },
+  beforeMount () {
+
   },
   watch: {
     formImg () {
-      this.imgUrlPreview = this.form.img
-        ? URL.createObjectURL(this.form.img)
+      this.imgUrlPreview = this.form.foto
+        ? URL.createObjectURL(this.form.foto)
         : ''
     }
   },
   methods: {
-    save () {
-      console.log(this.form)
+    validateState (ref) {
+      if (
+        this.veeFields[ref] &&
+        (this.veeFields[ref].dirty || this.veeFields[ref].validated)
+      ) {
+        return !this.veeErrors.has(ref)
+      }
+      return null
+    },
+    _updateMask (ev) {
+      if (ev.length > 14) {
+        this.masks.telefone = '(99) 99999-9999'
+      } else {
+        this.masks.telefone = '(99) 9999-99999'
+      }
+    },
+    sanitizeMasks (form) {
+      const fields = Object.keys(form)
+      const sanitizedForm = {}
+
+      for (let i = 0; i < fields.length; i++) {
+        const field = fields[i]
+        if (field === 'address_attributes') {
+          sanitizedForm[field] = this.sanitizeMasks(form[field])
+          continue
+        }
+        switch (field) {
+          case 'cpf':
+          case 'telefone':
+            sanitizedForm[field] = form[field].replace(/[^0-9]/g, '')
+            break
+          default:
+            sanitizedForm[field] = form[field]
+            break
+        }
+      }
+      console.log(sanitizedForm)
+      return sanitizedForm
+    },
+    save (e) {
+      e.preventDefault()
+      this.$validator.validateAll().then((result) => {
+        if (!result) {
+          return
+        }
+        const payload = this.sanitizeMasks(this.form)
+
+        this.$axios.post('/municipes', payload)
+          .then((res) => {
+            alert('Registro inserido com sucesso')
+            console.log(res)
+          })
+          .catch((err) => {
+            alert('erro na requisicao de post')
+            console.log(err)
+          })
+      })
+    },
+    async getAddresViaCEP () {
+      try {
+        const cep = this.form.address_attributes.cep.replace(/[^0-9]/g, '')
+        if (cep === '' || /^[0-9]{8}$/.test(cep) !== true) { return }
+        const { logradouro, complemento, bairro, uf, localidade, ibge, erro } = await this.$axios.$get('https://viacep.com.br/ws/' + cep + '/json/')
+        if (erro) { alert('erro: Cep não existente na base, favor digitar manualmente') }
+        this.form.address_attributes = {
+          cep: this.form.address_attributes.cep,
+          logradouro,
+          bairro,
+          cidade: localidade,
+          uf,
+          ibge,
+          complemento
+        }
+      } catch (error) {
+      }
     }
   }
 }
