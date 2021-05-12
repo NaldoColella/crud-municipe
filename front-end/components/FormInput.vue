@@ -19,7 +19,7 @@
         :name="id"
         :value="value"
         :type="type"
-        :placeholder="label"
+        :placeholder="placeholderValue"
         :aria-describedby="'input-' + id + '-feedback'"
         :data-vv-as="label"
         :state="validateState(id)"
@@ -38,6 +38,11 @@
 export default {
   inject: ['$validator'],
   props: {
+    placeholder: {
+      type: String,
+      default: '',
+      required: false
+    },
     validate: {
       type: Object,
       required: false,
@@ -79,6 +84,11 @@ export default {
     callback: {
       type: Object,
       default: null
+    }
+  },
+  computed: {
+    placeholderValue () {
+      return this.placeholder ? this.placeholder : this.label
     }
   },
   methods: {

@@ -17,6 +17,7 @@
         :name="'select-' + id"
         :value="value"
         :options="options"
+        :disabled="disabled"
         @change="$emit('input', $event)"
       />
     </b-input-group>
@@ -26,6 +27,10 @@
 <script>
 export default {
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Array,
       required: true

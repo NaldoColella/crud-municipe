@@ -48,6 +48,7 @@
                   :label="'Telefone'"
                   :col="'col-3'"
                   :type="'text'"
+                  :validate="{ required: true, min: 14 }"
                   :mask="masks.telefone"
                   :callback="callback.telefone"
                   @updatePhoneMask="onUpdatePhoneMask"
@@ -59,6 +60,7 @@
                   :label="'Status'"
                   :col="'col-2'"
                   :options="optionsStatus"
+                  :disabled="true"
                 />
               </b-form-row>
 
@@ -70,6 +72,7 @@
                   :icon="''"
                   :col="'col-3'"
                   :label="'E-mail'"
+                  :validate="{ required: true, email: true }"
                 />
 
                 <FormInput
@@ -78,7 +81,10 @@
                   :type="'text'"
                   :icon="''"
                   :col="'col-4'"
-                  :label="'Data de Nascimento:'"
+                  :label="'Data de Nascimento'"
+                  :mask='masks.date'
+                  :placeholder="'dd/mm/aaaa'"
+                  :validate="{ required: true, data: true }"
                 />
 
                 <b-form-group
@@ -197,10 +203,6 @@
     <b-button variant="outline-primary" to="/">
       <b-icon icon="arrow-left" style="margin-right: 5px" />Listagem
     </b-button>
-
-    <b-button variant="outline-primary" @click="sanitizeMasks(form)">
-      <b-icon icon="arrow-left" style="margin-right: 5px" />test
-    </b-button>
   </b-form>
 </template>
 
@@ -248,7 +250,8 @@ export default {
       masks: {
         cpf: '999.999.999-99',
         telefone: '(99) 9999-9999',
-        cep: '99.999.999'
+        cep: '99.999.999',
+        date: '99/99/9999'
       },
       optionsStatus: [
         { value: 'true', text: 'Ativo' },
