@@ -13,9 +13,29 @@
         <div style="flex: 0 0 160px">
           <div id="preview">
             <img v-if="imgUrlPreview" :src="imgUrlPreview" />
-            <div v-if="!imgUrlPreview" class="placeholder">
+            <div v-if="!imgUrlPreview" class="placeholder" @dragover="dragover" @dragleave="dragleave" @drop="drop">
               <b-icon icon="image" />
+              <label for="input-foto">Arraste ou <span>clique aqui</span> para inserir uma foto de perfil</label>
             </div>
+            <b-form-file
+              id="input-foto"
+              style="display: none;"
+              v-model="form.foto"
+              :state="Boolean(form.foto)"
+              placeholder="Escolha uma foto"
+              drop-placeholder="Arraste a foto aqui..."
+              accept="image/*"
+              browse-text="Pesquisar"
+            />
+            <b-button
+              style="margin-top: 5px"
+              v-if="form.foto"
+              block
+              variant="outline-primary"
+              @click="form.foto = null"
+            >
+              <span>Remover</span>
+            </b-button>
           </div>
         </div>
         <div style="flex: 1">
@@ -70,7 +90,7 @@
                   v-model="form.email"
                   :type="'text'"
                   :icon="''"
-                  :col="'col-3'"
+                  :col="'col-7'"
                   :label="'E-mail'"
                   :validate="{ required: true, email: true }"
                 />
@@ -80,44 +100,12 @@
                   v-model="form.data_nascimento"
                   :type="'text'"
                   :icon="''"
-                  :col="'col-4'"
+                  :col="'col-5'"
                   :label="'Data de Nascimento'"
                   :mask='masks.date'
                   :placeholder="'dd/mm/aaaa'"
                   :validate="{ required: true, data: true }"
                 />
-
-                <b-form-group
-                  id="input-group-3"
-                  label="Foto:"
-                  label-for="input-3"
-                  class="col-5"
-                >
-                  <b-input-group>
-                    <b-form-file
-                      v-model="form.foto"
-                      :state="Boolean(form.foto)"
-                      placeholder="Escolha uma foto"
-                      drop-placeholder="Arraste a foto aqui..."
-                      accept="image/*"
-                      browse-text="Pesquisar"
-                    />
-
-                    <b-input-group-apend
-                      v-if="form.foto"
-                      style="margin-left: 10px"
-                    >
-                      <b-button
-                        v-if="form.foto"
-                        block
-                        variant="outline-primary"
-                        @click="form.foto = null"
-                      >
-                        <span>Remover</span>
-                      </b-button>
-                    </b-input-group-apend>
-                  </b-input-group>
-                </b-form-group>
               </b-form-row>
             </b-col>
           </b-form-row>
@@ -203,6 +191,7 @@
     <b-button variant="outline-primary" to="/">
       <b-icon icon="arrow-left" style="margin-right: 5px" />Listagem
     </b-button>
+    <span @click="sanitizeMasks(form)">debug-sanitize</span>
   </b-form>
 </template>
 
@@ -266,9 +255,17 @@ export default {
   },
   watch: {
     formImg () {
-      this.imgUrlPreview = this.form.foto
-        ? URL.createObjectURL(this.form.foto)
-        : ''
+      if (!this.form.foto) {
+        this.imgUrlPreview = ''
+        this.imgBase64 = ''
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (f) => {
+        this.imgBase64 = f.target.result
+      }
+      reader.readAsDataURL(this.form.foto)
+      this.imgUrlPreview = URL.createObjectURL(this.form.foto)
     }
   },
   methods: {
@@ -302,17 +299,26 @@ export default {
 
       for (let i = 0; i < fields.length; i++) {
         const field = fields[i]
+        const fieldValue = form[field]
+
+        if (!fieldValue) {
+          sanitizedForm[field] = fieldValue
+          continue
+        }
         if (field === 'address_attributes') {
-          sanitizedForm[field] = this.sanitizeMasks(form[field])
+          sanitizedForm[field] = this.sanitizeMasks(fieldValue)
           continue
         }
         switch (field) {
           case 'cpf':
           case 'telefone':
-            sanitizedForm[field] = form[field].replace(/[^0-9]/g, '')
+            sanitizedForm[field] = fieldValue.replace(/[^0-9]/g, '')
+            break
+          case 'foto':
+            sanitizedForm[field] = this.imgBase64
             break
           default:
-            sanitizedForm[field] = form[field]
+            sanitizedForm[field] = fieldValue
             break
         }
       }
@@ -337,6 +343,17 @@ export default {
             console.log(err)
           })
       })
+    },
+    drop (event) {
+      event.preventDefault();
+      this.form.foto = event.dataTransfer.files[0];
+    },
+
+    dragover (event) {
+      event.preventDefault();
+    },
+
+    dragleave (event) {
     }
   }
 }
@@ -344,24 +361,36 @@ export default {
 <style>
 #preview {
   width: 150px;
-  height: 150px;
+  min-height: 150px;
+  position: relative;
+  background: #f2f2f2;
+  margin-bottom: 1rem;
 }
 #preview img {
   max-width: 150px;
   max-height: 150px;
 }
 .placeholder {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #f2f2f2;
-}
-.placeholder .b-icon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-align: center;
+}
+.placeholder .b-icon {
   font-size: 45px;
+  margin-bottom: 5px;
+}
+.placeholder label{
+  cursor: pointer;
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: center;
+  width: 130px;
+  max-width: 95%;
+}
+.placeholder label span{
+  text-decoration: underline;
 }
 .form-group > label {
   margin-bottom: 5px;
